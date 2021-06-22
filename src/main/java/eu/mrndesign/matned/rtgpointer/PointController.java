@@ -2,6 +2,7 @@ package eu.mrndesign.matned.rtgpointer;
 
 import eu.mrndesign.matned.rtgpointer.service.IPointService;
 import eu.mrndesign.matned.rtgpointer.service.PointService;
+import eu.mrndesign.matned.rtgpointer.utils.Variables;
 import eu.mrndesign.matned.rtgpointer.widget.IPointList;
 import eu.mrndesign.matned.rtgpointer.widget.IWorkCanvas;
 import eu.mrndesign.matned.rtgpointer.widget.PointList;
@@ -45,12 +46,12 @@ public class PointController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        File file = new File("src/main/resources/turtle-x-ray.jpg");
+        File file = new File(Variables.MAIN_PICTURE);
         Image image = new Image(file.toURI().toString());
         BackgroundImage myBI = new BackgroundImage(image,
                 BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
                 new BackgroundSize(100, 100, true, true, true, true));
-        IPointService ps = PointService.getInstance();
+        IPointService mainService = PointService.getInstance();
         screen1.setBackground(new Background(myBI));
         screen2.setBackground(new Background(myBI));
         screen3.setBackground(new Background(myBI));
@@ -66,12 +67,13 @@ public class PointController implements Initializable {
 
         leftScrollPane.setContent((Node) pointList);
 
-        ps.applyWidgets(canvas1, canvas2, canvas3, canvas4, pointList);
-
         screen1.getChildren().add((Node) canvas1);
         screen2.getChildren().add((Node) canvas2);
         screen3.getChildren().add((Node) canvas3);
         screen4.getChildren().add((Node) canvas4);
+
+        mainService.applyWidgets(canvas1, canvas2, canvas3, canvas4, pointList);
+
     }
 
 

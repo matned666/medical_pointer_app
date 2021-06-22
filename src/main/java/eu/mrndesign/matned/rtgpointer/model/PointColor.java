@@ -27,6 +27,19 @@ public enum PointColor {
         }
     }
 
+    public String getColorName(){
+        switch (this){
+            case WHITE: return "white";
+            case PINK: return "pink";
+            case CYAN: return "cyan";
+            case MAGENTA: return "magenta";
+            case GREEN: return "green";
+            case YELLOW: return "yellow";
+            case RED: return "red";
+            default:return "blue";
+        }
+    }
+
     public Color getColor(){
         switch (this){
             case WHITE: return Color.WHITE;

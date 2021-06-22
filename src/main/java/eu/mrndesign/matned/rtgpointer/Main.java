@@ -2,8 +2,13 @@ package eu.mrndesign.matned.rtgpointer;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -18,6 +23,8 @@ public class Main extends Application {
         PointController controller = loader.getController();
         primaryStage.setTitle("RTG Pointer");
         Scene scene = new Scene(anchorPane);
+        anchorPane.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();

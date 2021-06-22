@@ -1,4 +1,4 @@
-package eu.mrndesign.matned.rtgpointer.graphic;
+package eu.mrndesign.matned.rtgpointer.widget.pointwidget;
 
 import eu.mrndesign.matned.rtgpointer.model.PointColor;
 import javafx.scene.canvas.GraphicsContext;
@@ -8,10 +8,8 @@ public class GraphPoint implements IGraphPoint {
 
     private double x;
     private double y;
-    private double startX;
-    private double startY;
-    private double endX;
-    private double endY;
+    private final double startX;
+    private final double startY;
     private final PointColor pointColor;
 
     public GraphPoint(double startX, double startY, PointColor pointColor) {
@@ -19,8 +17,6 @@ public class GraphPoint implements IGraphPoint {
         this.y = startY;
         this.startX = x-POINT_RADIUS;
         this.startY = y-POINT_RADIUS;
-        this.endX = x+POINT_RADIUS;
-        this.endY = y+POINT_RADIUS;
         this.pointColor = pointColor;
     }
 

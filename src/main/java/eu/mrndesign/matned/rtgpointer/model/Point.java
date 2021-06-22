@@ -2,7 +2,7 @@ package eu.mrndesign.matned.rtgpointer.model;
 
 import java.util.Objects;
 
-import static eu.mrndesign.matned.rtgpointer.graphic.IGraphPoint.POINT_RADIUS;
+import static eu.mrndesign.matned.rtgpointer.widget.pointwidget.IGraphPoint.POINT_RADIUS;
 
 public class Point implements IPoint{
 
@@ -86,12 +86,12 @@ public class Point implements IPoint{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Point point = (Point) o;
-        return name.equals(point.name) && x.equals(point.x) && y.equals(point.y) && color == point.color;
+        return isSelected == point.isSelected && Objects.equals(name, point.name) && Objects.equals(pointId, point.pointId) && Objects.equals(x, point.x) && Objects.equals(y, point.y) && color == point.color;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, x, y, color);
+        return Objects.hash(name, pointId, x, y, color, isSelected);
     }
 
     @Override

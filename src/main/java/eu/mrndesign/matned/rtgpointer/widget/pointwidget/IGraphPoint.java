@@ -1,17 +1,13 @@
-package eu.mrndesign.matned.rtgpointer.graphic;
+package eu.mrndesign.matned.rtgpointer.widget.pointwidget;
 
 import eu.mrndesign.matned.rtgpointer.model.IPoint;
-import eu.mrndesign.matned.rtgpointer.model.PointColor;
 import javafx.scene.canvas.GraphicsContext;
 
-public interface IGraphPoint{
+public interface IGraphPoint extends IGraphObject{
 
     int POINT_RADIUS = 5;
 
-    double getX();
-    double getY();
-    void setPoint(double x, double y);
-    PointColor getPointColor();
+
 
     void draw(GraphicsContext context);
 

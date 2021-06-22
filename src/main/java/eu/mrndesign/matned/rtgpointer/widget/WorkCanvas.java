@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 public class WorkCanvas extends Canvas implements IWorkCanvas {
@@ -17,13 +18,13 @@ public class WorkCanvas extends Canvas implements IWorkCanvas {
     private double startY;
     private final IPointService pointService;
 
-    private final List<IWorkCanvas> allCanvas;
+    private final List<IWidget> allContainers;
 
     private Optional<IPoint> currentPoint;
     
     public WorkCanvas() {
-        allCanvas = new LinkedList<>();
-        allCanvas.add(this);
+        allContainers = new LinkedList<>();
+        allContainers.add(this);
         this.pointService = PointService.getInstance();
         this.setWidth(CANVAS_WIDTH);
         this.setHeight(CANVAS_HEIGHT);
@@ -34,8 +35,8 @@ public class WorkCanvas extends Canvas implements IWorkCanvas {
 
 //     An essential method to refresh all added canvas live.
     @Override
-    public void applyCanvas(IWorkCanvas... canvas) {
-        allCanvas.addAll(Arrays.asList(canvas));
+    public void applyCanvas(IWidget... canvas) {
+        allContainers.addAll(Arrays.asList(canvas));
     }
 
 
@@ -80,7 +81,7 @@ public class WorkCanvas extends Canvas implements IWorkCanvas {
     }
 
     private void refreshAll() {
-        allCanvas.forEach(pointService::refresh);
+        allContainers.forEach(pointService::refresh);
     }
 
     private void applyShape() {

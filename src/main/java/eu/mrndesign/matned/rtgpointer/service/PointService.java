@@ -1,11 +1,14 @@
 package eu.mrndesign.matned.rtgpointer.service;
 
-import eu.mrndesign.matned.rtgpointer.graphic.IGraphPoint;
+import eu.mrndesign.matned.rtgpointer.widget.pointwidget.IGraphPoint;
+import eu.mrndesign.matned.rtgpointer.widget.pointwidget.IListObject;
 import eu.mrndesign.matned.rtgpointer.model.IPoint;
 import eu.mrndesign.matned.rtgpointer.model.Point;
-import eu.mrndesign.matned.rtgpointer.widget.IWorkCanvas;
-import eu.mrndesign.matned.rtgpointer.widget.WorkCanvas;
+import eu.mrndesign.matned.rtgpointer.widget.*;
+import eu.mrndesign.matned.rtgpointer.widget.pointwidget.ListObject;
+import javafx.scene.Node;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
@@ -13,13 +16,11 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- *
- *  PointService singleton class
- *  created to have the same instance for all 4 canvas
- *
+ * PointService singleton class
+ * created to have the same instance for all 4 canvas
  */
 
-public class PointService implements IPointService{
+public class PointService implements IPointService {
 
     private static IPointService instance;
 
@@ -34,25 +35,22 @@ public class PointService implements IPointService{
     }
 
 
-
     private final List<IPoint> points;
+    private final List<IListObject> listObjects;
 
     private PointService() {
         if (instance != null) {
             throw new IllegalStateException("Cannot create new instance, please use getInstance method instead.");
         }
         points = new ArrayList<>();
+        listObjects = new ArrayList<>();
     }
 
     @Override
-    public void refresh(IWorkCanvas canvas){
-        GraphicsContext gc = getGraphicContext(canvas);
-        gc.clearRect(0, 0, ((WorkCanvas)canvas).getWidth(), ((WorkCanvas)canvas).getHeight());
-        gc.setStroke(Color.BLACK);
-        gc.strokeRect(0, 0, ((WorkCanvas)canvas).getWidth(), ((WorkCanvas)canvas).getHeight());
-        for (IPoint point : getPoints()) {
-            IGraphPoint.applyData(point).draw(gc);
-        }
+    public void refresh(IWidget object) {
+        if (object instanceof IWorkCanvas) refreshCanvas(object);
+        else if (object instanceof IListObject) refreshListObject(object);
+        else if (object instanceof IPointList) refreshPointList(object);
     }
 
     @Override
@@ -62,12 +60,12 @@ public class PointService implements IPointService{
 
     @Override
     public Optional<IPoint> getPoint(double x, double y) {
-        return points.stream().filter(point->point.isInRange(x,y) ).findFirst();
+        return points.stream().filter(point -> point.isInRange(x, y)).findFirst();
     }
 
     @Override
     public void insertNewPoint(double x, double y) {
-        points.add(new Point(getLastId()+1, x, y, getLastColor()+1));
+        points.add(new Point(getLastId() + 1, x, y, getLastColor() + 1));
     }
 
     @Override
@@ -88,25 +86,57 @@ public class PointService implements IPointService{
 
     @Override
     public void deletePoint(IPoint point) {
-        points.remove(points.stream().filter(x->x.getId().equals(point.getId())).findFirst().orElse(null));
+        points.remove(points.stream().filter(x -> x.getId().equals(point.getId())).findFirst().orElse(null));
     }
 
 
+    private void refreshListObject(IWidget obj) {
+
+    }
+
+    private void refreshPointList(IWidget obj) {
+        for (IPoint point :
+                points) {
+            if (listObjects.stream().noneMatch(x -> x.getPoint().equals(point))) {
+                IListObject lo = new ListObject(point);
+                listObjects.add(lo);
+                ((VBox) obj).getChildren().add((Node) lo);
+
+            }
+        }
+        if (points.size() < listObjects.size()) {
+            listObjects.forEach(x->{
+                if(points.stream().noneMatch(y->y.equals(x.getPoint())))
+                    ((VBox) obj).getChildren().remove((Node) x);
+            });
+        }
+    }
+
+    private void refreshCanvas(IWidget obj) {
+        GraphicsContext gc = getGraphicContext(obj);
+        gc.clearRect(0, 0, ((WorkCanvas) obj).getWidth(), ((WorkCanvas) obj).getHeight());
+        gc.setStroke(Color.BLACK);
+        gc.strokeRect(0, 0, ((WorkCanvas) obj).getWidth(), ((WorkCanvas) obj).getHeight());
+        for (IPoint point : getPoints()) {
+            IGraphPoint.applyData(point).draw(gc);
+        }
+    }
+
     private Long getLastId() {
-        return getLastPoint()!= null? getLastPoint().getId(): 0L;
+        return getLastPoint() != null ? getLastPoint().getId() : 0L;
     }
 
     private int getLastColor() {
-        return getLastPoint()!= null? getLastPoint().getPointColor().getColorId(): 0;
+        return getLastPoint() != null ? getLastPoint().getPointColor().getColorId() : 0;
     }
 
     private IPoint getLastPoint() {
-        if (points.size()>0) return points.get(points.size()-1);
+        if (points.size() > 0) return points.get(points.size() - 1);
         else return null;
     }
 
-    private GraphicsContext getGraphicContext(IWorkCanvas canvas) {
-        return ((WorkCanvas)canvas).getGraphicsContext2D();
+    private GraphicsContext getGraphicContext(IWidget canvas) {
+        return ((WorkCanvas) canvas).getGraphicsContext2D();
     }
 
 }

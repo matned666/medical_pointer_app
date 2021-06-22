@@ -5,10 +5,6 @@ import javafx.scene.canvas.GraphicsContext;
 
 public interface IGraphPoint extends IGraphObject{
 
-    int POINT_RADIUS = 5;
-
-
-
     void draw(GraphicsContext context);
 
     static IGraphPoint applyData(IPoint model){

@@ -16,31 +16,34 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class ListObject extends AnchorPane implements IListObject {
 
-    private IPoint point;
+    private final IPoint point;
 
-    private String name;
-    private double x;
-    private double y;
-    private PointColor color;
-    private IPointList root;
+    private final PointColor color;
     private TextField xTextField;
     private TextField yTextField;
     private final IPointService pointService = PointService.getInstance();
 
     public ListObject(IPoint point, IPointList root) {
         this.point = point;
-        this.root = root;
 
-        this.x = point.getX();
-        this.y = point.getY();
         this.color = point.getPointColor();
-        this.name = point.getName();
         this.setBackground(new Background(new BackgroundFill(Color.web("rgb(25,25,25)"), CornerRadii.EMPTY, Insets.EMPTY)));
         this.prefWidthProperty().bind(((VBox) root).widthProperty());
         labels(point);
         border();
         textFields();
 
+    }
+
+    @Override
+    public IPoint getPoint() {
+        return this.point;
+    }
+
+    @Override
+    public void update() {
+        xTextField.setText(point.getX().toString());
+        yTextField.setText(point.getY().toString());
     }
 
     private void textFields() {
@@ -68,8 +71,8 @@ public class ListObject extends AnchorPane implements IListObject {
         xTextField.setOnKeyReleased(x -> {
             try {
                 double d = Double.parseDouble(xTextField.getText());
-                xPrev.set(Double.parseDouble(xTextField.getText()));
-                point.setX(Double.parseDouble(xTextField.getText()));
+                xPrev.set(d);
+                point.setX(d);
                 pointService.refreshAll();
             } catch (Exception e) {
                 xTextField.setText(xPrev.get().toString());
@@ -78,21 +81,13 @@ public class ListObject extends AnchorPane implements IListObject {
         yTextField.setOnKeyReleased(x -> {
             try {
                 double d = Double.parseDouble(yTextField.getText());
-                yPrev.set(Double.parseDouble(yTextField.getText()));
-                point.setY(Double.parseDouble(yTextField.getText()));
+                yPrev.set(d);
+                point.setY(d);
                 pointService.refreshAll();
             } catch (Exception e) {
                 yTextField.setText(yPrev.get().toString());
             }
         });
-    }
-
-    private String removeLastCharacter(String str) {
-        String result = null;
-        if ((str != null) && (str.length() > 0)) {
-            result = str.substring(0, str.length() - 1);
-        }
-        return result;
     }
 
     private void labels(IPoint point) {
@@ -127,37 +122,5 @@ public class ListObject extends AnchorPane implements IListObject {
         r.setFill(Color.TRANSPARENT);
         this.getChildren().add(r);
         this.setStyle("-fx-border-color: black; -fx-border-width: 2px");
-    }
-
-    @Override
-    public double getX() {
-        return x;
-    }
-
-    @Override
-    public double getY() {
-        return y;
-    }
-
-    @Override
-    public void setPoint(double x, double y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    @Override
-    public PointColor getPointColor() {
-        return color;
-    }
-
-    @Override
-    public IPoint getPoint() {
-        return this.point;
-    }
-
-    @Override
-    public void update() {
-        xTextField.setText(point.getX().toString());
-        yTextField.setText(point.getY().toString());
     }
 }

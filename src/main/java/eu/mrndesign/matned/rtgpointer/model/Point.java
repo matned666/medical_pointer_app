@@ -2,7 +2,7 @@ package eu.mrndesign.matned.rtgpointer.model;
 
 import java.util.Objects;
 
-import static eu.mrndesign.matned.rtgpointer.widget.pointwidget.IGraphPoint.POINT_RADIUS;
+import static eu.mrndesign.matned.rtgpointer.utils.Variables.POINT_RADIUS;
 
 public class Point implements IPoint{
 

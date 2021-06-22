@@ -92,20 +92,6 @@ public class PointService implements IPointService {
         }
     }
 
-    @Override
-    public void changePosition(IPoint point, double x, double y) {
-        if (point != null) {
-            point.setX(x);
-            point.setY(y);
-        }
-    }
-
-    @Override
-    public void deletePoint(IPoint point) {
-        points.remove(points.stream().filter(x -> x.getId().equals(point.getId())).findFirst().orElse(null));
-    }
-
-
     private void refreshListObjects() {
         listObjects
                 .forEach(IListObject::update);

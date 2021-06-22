@@ -1,7 +1,6 @@
 package eu.mrndesign.matned.rtgpointer;
 
-import eu.mrndesign.matned.rtgpointer.model.Point;
-import eu.mrndesign.matned.rtgpointer.service.IPointService;
+refaimport eu.mrndesign.matned.rtgpointer.service.IPointService;
 import eu.mrndesign.matned.rtgpointer.service.PointService;
 import eu.mrndesign.matned.rtgpointer.widget.IPointList;
 import eu.mrndesign.matned.rtgpointer.widget.IWorkCanvas;
@@ -14,12 +13,10 @@ import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
-import eu.mrndesign.matned.rtgpointer.model.IPoint;
 import javafx.scene.paint.Color;
 
 import java.io.File;
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class PointController implements Initializable {
@@ -42,14 +39,6 @@ public class PointController implements Initializable {
     @FXML
     private AnchorPane screen4;
 
-    private IWorkCanvas canvas1;
-    private IWorkCanvas canvas2;
-    private IWorkCanvas canvas3;
-    private IWorkCanvas canvas4;
-    private IPointList pointList;
-
-    private List<IPoint> points;
-
     public PointController() {
     }
 
@@ -69,30 +58,20 @@ public class PointController implements Initializable {
         leftScrollPane.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
         pictureGrid.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
 
-        canvas1 = new WorkCanvas();
-        canvas2 = new WorkCanvas();
-        canvas3 = new WorkCanvas();
-        canvas4 = new WorkCanvas();
-        pointList = new PointList();
-
+        IWorkCanvas canvas1 = new WorkCanvas();
+        IWorkCanvas canvas2 = new WorkCanvas();
+        IWorkCanvas canvas3 = new WorkCanvas();
+        IWorkCanvas canvas4 = new WorkCanvas();
+        IPointList pointList = new PointList();
 
         leftScrollPane.setContent((Node) pointList);
 
-
         ps.applyWidgets(canvas1, canvas2, canvas3, canvas4, pointList);
-
-//        canvas1.applyCanvas(canvas2, canvas3, canvas4, pointList);
-//        canvas2.applyCanvas(canvas1, canvas3, canvas4, pointList);
-//        canvas3.applyCanvas(canvas1, canvas2, canvas4, pointList);
-//        canvas4.applyCanvas(canvas1, canvas2, canvas3, pointList);
-
-
 
         screen1.getChildren().add((Node) canvas1);
         screen2.getChildren().add((Node) canvas2);
         screen3.getChildren().add((Node) canvas3);
         screen4.getChildren().add((Node) canvas4);
-
     }
 
 

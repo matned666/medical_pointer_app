@@ -4,6 +4,8 @@ import eu.mrndesign.matned.rtgpointer.model.PointColor;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
+import static eu.mrndesign.matned.rtgpointer.utils.Variables.POINT_RADIUS;
+
 public class GraphPoint implements IGraphPoint {
 
     private double x;

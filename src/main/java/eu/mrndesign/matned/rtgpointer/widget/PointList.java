@@ -1,7 +1,5 @@
 package eu.mrndesign.matned.rtgpointer.widget;
 
-import eu.mrndesign.matned.rtgpointer.widget.pointwidget.ListObject;
-import eu.mrndesign.matned.rtgpointer.model.IPoint;
 import javafx.geometry.Insets;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -16,9 +14,4 @@ public class PointList extends VBox implements IPointList{
 
     }
 
-
-    @Override
-    public void addObject(IPoint point) {
-        this.getChildren().add(new ListObject(point, this));
-    }
 }

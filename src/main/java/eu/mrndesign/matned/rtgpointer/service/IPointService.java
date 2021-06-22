@@ -16,6 +16,4 @@ public interface IPointService {
     Optional<IPoint> getPoint(double x, double y);
     void insertNewPoint(double x, double y);
     void selectPoint(IPoint point);
-    void changePosition(IPoint point, double x, double y);
-    void deletePoint(IPoint point);
 }

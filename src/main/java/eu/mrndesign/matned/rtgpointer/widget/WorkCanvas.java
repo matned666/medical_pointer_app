@@ -34,10 +34,10 @@ public class WorkCanvas extends Canvas implements IWorkCanvas {
     }
 
 //     An essential method to refresh all added canvas live.
-    @Override
-    public void applyCanvas(IWidget... canvas) {
-        allContainers.addAll(Arrays.asList(canvas));
-    }
+//    @Override
+//    public void applyCanvas(IWidget... canvas) {
+//        allContainers.addAll(Arrays.asList(canvas));
+//    }
 
 
 
@@ -52,9 +52,9 @@ public class WorkCanvas extends Canvas implements IWorkCanvas {
                             x ->{
                                 x.setX(startX);
                                 x.setY(startY);
-                                refreshAll();
+                                pointService.refreshAll();
                             },
-                            this::refreshAll);
+                            pointService::refreshAll);
         });
     }
 
@@ -67,7 +67,7 @@ public class WorkCanvas extends Canvas implements IWorkCanvas {
                             pointService::selectPoint,
                             () -> {
                                 applyShape();
-                                refreshAll();
+                                pointService.refreshAll();
                             });
         });
     }
@@ -80,9 +80,9 @@ public class WorkCanvas extends Canvas implements IWorkCanvas {
         });
     }
 
-    private void refreshAll() {
-        allContainers.forEach(pointService::refresh);
-    }
+//    private void refreshAll() {
+//        allContainers.forEach(pointService::refresh);
+//    }
 
     private void applyShape() {
         pointService.insertNewPoint(startX, startY);

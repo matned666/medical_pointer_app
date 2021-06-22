@@ -12,7 +12,6 @@ import javafx.scene.paint.Color;
 public class PointList extends VBox implements IPointList{
 
     public PointList() {
-        this.setWidth(300);
         this.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
 
     }
@@ -20,6 +19,6 @@ public class PointList extends VBox implements IPointList{
 
     @Override
     public void addObject(IPoint point) {
-        this.getChildren().add(new ListObject(point));
+        this.getChildren().add(new ListObject(point, this));
     }
 }

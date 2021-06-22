@@ -1,6 +1,8 @@
 package eu.mrndesign.matned.rtgpointer;
 
 import eu.mrndesign.matned.rtgpointer.model.Point;
+import eu.mrndesign.matned.rtgpointer.service.IPointService;
+import eu.mrndesign.matned.rtgpointer.service.PointService;
 import eu.mrndesign.matned.rtgpointer.widget.IPointList;
 import eu.mrndesign.matned.rtgpointer.widget.IWorkCanvas;
 import eu.mrndesign.matned.rtgpointer.widget.PointList;
@@ -59,6 +61,7 @@ public class PointController implements Initializable {
         BackgroundImage myBI = new BackgroundImage(image,
                 BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
                 new BackgroundSize(100, 100, true, true, true, true));
+        IPointService ps = PointService.getInstance();
         screen1.setBackground(new Background(myBI));
         screen2.setBackground(new Background(myBI));
         screen3.setBackground(new Background(myBI));
@@ -76,11 +79,12 @@ public class PointController implements Initializable {
         leftScrollPane.setContent((Node) pointList);
 
 
+        ps.applyWidgets(canvas1, canvas2, canvas3, canvas4, pointList);
 
-        canvas1.applyCanvas(canvas2, canvas3, canvas4, pointList);
-        canvas2.applyCanvas(canvas1, canvas3, canvas4, pointList);
-        canvas3.applyCanvas(canvas1, canvas2, canvas4, pointList);
-        canvas4.applyCanvas(canvas1, canvas2, canvas3, pointList);
+//        canvas1.applyCanvas(canvas2, canvas3, canvas4, pointList);
+//        canvas2.applyCanvas(canvas1, canvas3, canvas4, pointList);
+//        canvas3.applyCanvas(canvas1, canvas2, canvas4, pointList);
+//        canvas4.applyCanvas(canvas1, canvas2, canvas3, pointList);
 
 
 

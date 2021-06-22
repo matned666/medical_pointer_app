@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,6 +38,7 @@ public class PointService implements IPointService {
 
     private final List<IPoint> points;
     private final List<IListObject> listObjects;
+    private final List<IWidget> widgets;
 
     private PointService() {
         if (instance != null) {
@@ -44,13 +46,27 @@ public class PointService implements IPointService {
         }
         points = new ArrayList<>();
         listObjects = new ArrayList<>();
+        widgets = new ArrayList<>();
+    }
+
+    @Override
+    public void refreshAll() {
+        for (IWidget w : widgets) {
+            refresh(w);
+        }
     }
 
     @Override
     public void refresh(IWidget object) {
         if (object instanceof IWorkCanvas) refreshCanvas(object);
-        else if (object instanceof IListObject) refreshListObject(object);
         else if (object instanceof IPointList) refreshPointList(object);
+        refreshListObjects();
+
+    }
+
+    @Override
+    public void applyWidgets(IWidget... widgets) {
+        this.widgets.addAll(Arrays.asList(widgets));
     }
 
     @Override
@@ -90,23 +106,24 @@ public class PointService implements IPointService {
     }
 
 
-    private void refreshListObject(IWidget obj) {
-
+    private void refreshListObjects() {
+        listObjects
+                .forEach(IListObject::update);
     }
 
     private void refreshPointList(IWidget obj) {
         for (IPoint point :
                 points) {
             if (listObjects.stream().noneMatch(x -> x.getPoint().equals(point))) {
-                IListObject lo = new ListObject(point);
+                IListObject lo = new ListObject(point, (IPointList) obj);
                 listObjects.add(lo);
                 ((VBox) obj).getChildren().add((Node) lo);
 
             }
         }
         if (points.size() < listObjects.size()) {
-            listObjects.forEach(x->{
-                if(points.stream().noneMatch(y->y.equals(x.getPoint())))
+            listObjects.forEach(x -> {
+                if (points.stream().noneMatch(y -> y.equals(x.getPoint())))
                     ((VBox) obj).getChildren().remove((Node) x);
             });
         }

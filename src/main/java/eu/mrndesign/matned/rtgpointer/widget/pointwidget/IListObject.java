@@ -6,8 +6,5 @@ public interface IListObject extends IGraphObject{
 
     IPoint getPoint();
 
-    static IListObject applyData(IPoint model){
-        return new ListObject(model);
-    }
-
+    void update();
 }

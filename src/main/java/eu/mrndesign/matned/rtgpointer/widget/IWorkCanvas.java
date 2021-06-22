@@ -5,6 +5,6 @@ public interface IWorkCanvas  extends IWidget{
     int CANVAS_WIDTH = 490;
     int CANVAS_HEIGHT = 400;
 
-    void applyCanvas(IWidget... canvas);
+//    void applyCanvas(IWidget... canvas);
 
 }

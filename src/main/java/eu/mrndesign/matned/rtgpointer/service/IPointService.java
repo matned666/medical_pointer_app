@@ -8,7 +8,9 @@ import java.util.Optional;
 
 public interface IPointService {
 
+    void refreshAll();
     void refresh(IWidget canvas);
+    void applyWidgets(IWidget... widgets);
 
     List<IPoint> getPoints();
     Optional<IPoint> getPoint(double x, double y);

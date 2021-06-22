@@ -1,6 +1,6 @@
 package eu.mrndesign.matned.rtgpointer;
 
-refaimport eu.mrndesign.matned.rtgpointer.service.IPointService;
+import eu.mrndesign.matned.rtgpointer.service.IPointService;
 import eu.mrndesign.matned.rtgpointer.service.PointService;
 import eu.mrndesign.matned.rtgpointer.widget.IPointList;
 import eu.mrndesign.matned.rtgpointer.widget.IWorkCanvas;

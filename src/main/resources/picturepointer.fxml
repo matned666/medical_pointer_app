@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.effect.ColorAdjust?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane fx:id="background" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eu.mrndesign.matned.rtgpointer.PointController">
+   <AnchorPane fx:id="backgroundPane" prefHeight="800.0" prefWidth="980.0" AnchorPane.leftAnchor="300.0">
+      <padding>
+         <Insets left="300.0" />
+      </padding>
+   </AnchorPane>
+    <ScrollPane fx:id="leftScrollPane" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" prefHeight="800.0" prefWidth="300.0">
+        <VBox fx:id="pointsList" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="300.0" />
+    </ScrollPane>
+    <GridPane fx:id="pictureGrid" layoutX="300.0" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" prefHeight="800.0" prefWidth="980.0">
+      <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+      </columnConstraints>
+      <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      </rowConstraints>
+      <children>
+         <AnchorPane fx:id="screen1" prefHeight="200.0" prefWidth="200.0" />
+         <AnchorPane fx:id="screen2" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" />
+         <AnchorPane fx:id="screen3" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" />
+         <AnchorPane fx:id="screen4" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      </children>
+    </GridPane>
+   <effect>
+      <ColorAdjust />
+   </effect>
+</AnchorPane>

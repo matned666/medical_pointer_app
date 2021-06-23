@@ -64,37 +64,41 @@ public class ListObject extends AnchorPane implements IListObject {
         yTextField.setText(point.getY().toString());
         this.getChildren().add(xTextField);
         this.getChildren().add(yTextField);
-        setChangePossibility();
+        setFieldsKeyListeners();
 
     }
 
-    private void setChangePossibility() {
+    private void setFieldsKeyListeners() {
         AtomicReference<Double> xPrev = new AtomicReference<>(Double.parseDouble(xTextField.getText()));
         AtomicReference<Double> yPrev = new AtomicReference<>(Double.parseDouble(yTextField.getText()));
-        xTextField.setOnKeyReleased(x -> {
-            try {
-                double d = Double.parseDouble(xTextField.getText());
-                if (d > CANVAS_WIDTH) d = CANVAS_WIDTH;
-                if (d < 0) d = 0;
-                xPrev.set(d);
-                point.setX(d);
-                pointService.refreshAll();
-            } catch (Exception e) {
-                xTextField.setText(xPrev.get().toString());
-            }
-        });
-        yTextField.setOnKeyReleased(x -> {
-            try {
-                double d = Double.parseDouble(yTextField.getText());
-                if (d > CANVAS_HEIGHT) d = CANVAS_HEIGHT;
-                if (d < 0) d = 0;
-                yPrev.set(d);
-                point.setY(d);
-                pointService.refreshAll();
-            } catch (Exception e) {
-                yTextField.setText(yPrev.get().toString());
-            }
-        });
+        xTextField.setOnKeyReleased(x -> xFieldKeyListener(xPrev));
+        yTextField.setOnKeyReleased(x -> yFieldKeyListener(yPrev));
+    }
+
+    private void yFieldKeyListener(AtomicReference<Double> yPrev) {
+        try {
+            double d = Double.parseDouble(yTextField.getText());
+            if (d > CANVAS_HEIGHT) d = CANVAS_HEIGHT;
+            if (d < 0) d = 0;
+            yPrev.set(d);
+            point.setY(d);
+            pointService.refreshAll();
+        } catch (Exception e) {
+            yTextField.setText(yPrev.get().toString());
+        }
+    }
+
+    private void xFieldKeyListener(AtomicReference<Double> xPrev) {
+        try {
+            double d = Double.parseDouble(xTextField.getText());
+            if (d > CANVAS_WIDTH) d = CANVAS_WIDTH;
+            if (d < 0) d = 0;
+            xPrev.set(d);
+            point.setX(d);
+            pointService.refreshAll();
+        } catch (Exception e) {
+            xTextField.setText(xPrev.get().toString());
+        }
     }
 
     private void labels(IPoint point) {

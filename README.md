@@ -8,6 +8,9 @@ Simple test application - create points on a roentgen picture.
 
 JavaFX framework
 
+Some class names may be taken from MVC model <br>
+but there isn't much from it since there is only one view.
+
 --------------------------------------
 # Architecture
 
@@ -30,7 +33,7 @@ RUN AND BE HAPPY!
 ------------------------------
 #Tests
 
-TODO
+A few tests for Service and Point
 
 --------------------------
 

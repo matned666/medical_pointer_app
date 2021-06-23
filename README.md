@@ -22,6 +22,11 @@ IWidget implementation goes for canvas and all javafx elements, excluding FXML i
 
 JavaFX
 
+Java 11
+
+VM settings: <br>
+`--module-path /<pathToJavaFX>/openjfx-11.0.2_linux-x64_bin-sdk/javafx-sdk-11.0.2/lib --add-modules javafx.controls,javafx.fxml`
+
 --------------------------
 # Usage
 RUN AND BE HAPPY!

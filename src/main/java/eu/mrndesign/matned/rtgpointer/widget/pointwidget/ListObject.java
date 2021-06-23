@@ -14,6 +14,9 @@ import javafx.scene.text.Text;
 
 import java.util.concurrent.atomic.AtomicReference;
 
+import static eu.mrndesign.matned.rtgpointer.utils.Variables.CANVAS_HEIGHT;
+import static eu.mrndesign.matned.rtgpointer.utils.Variables.CANVAS_WIDTH;
+
 public class ListObject extends AnchorPane implements IListObject {
 
     private final IPoint point;
@@ -71,6 +74,8 @@ public class ListObject extends AnchorPane implements IListObject {
         xTextField.setOnKeyReleased(x -> {
             try {
                 double d = Double.parseDouble(xTextField.getText());
+                if (d > CANVAS_WIDTH) d = CANVAS_WIDTH;
+                if (d < 0) d = 0;
                 xPrev.set(d);
                 point.setX(d);
                 pointService.refreshAll();
@@ -81,6 +86,8 @@ public class ListObject extends AnchorPane implements IListObject {
         yTextField.setOnKeyReleased(x -> {
             try {
                 double d = Double.parseDouble(yTextField.getText());
+                if (d > CANVAS_HEIGHT) d = CANVAS_HEIGHT;
+                if (d < 0) d = 0;
                 yPrev.set(d);
                 point.setY(d);
                 pointService.refreshAll();

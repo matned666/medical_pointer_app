@@ -1,21 +1,21 @@
 package eu.mrndesign.matned.rtgpointer;
 
+import eu.mrndesign.matned.rtgpointer.utils.Variables;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.paint.Color;
+import javafx.scene.image.Image;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
+
+import java.io.File;
 
 public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-
+        File file = new File(Variables.MAIN_PICTURE);
+        Image image = new Image(file.toURI().toString());
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass()
                 .getResource("/picturepointer.fxml"));
@@ -23,7 +23,6 @@ public class Main extends Application {
         PointController controller = loader.getController();
         primaryStage.setTitle("RTG Pointer");
         Scene scene = new Scene(anchorPane);
-        anchorPane.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
 
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);

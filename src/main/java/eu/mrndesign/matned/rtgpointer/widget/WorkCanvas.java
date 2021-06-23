@@ -7,6 +7,9 @@ import javafx.scene.canvas.Canvas;
 
 import java.util.Optional;
 
+import static eu.mrndesign.matned.rtgpointer.utils.Variables.CANVAS_HEIGHT;
+import static eu.mrndesign.matned.rtgpointer.utils.Variables.CANVAS_WIDTH;
+
 
 public class WorkCanvas extends Canvas implements IWorkCanvas {
 
@@ -31,6 +34,10 @@ public class WorkCanvas extends Canvas implements IWorkCanvas {
         this.setOnMouseDragged(event -> {
             startX = event.getX();
             startY = event.getY();
+            if (startX > CANVAS_WIDTH) startX = CANVAS_WIDTH;
+            if (startX < 0) startX = 0;
+            if (startY > CANVAS_HEIGHT) startY = CANVAS_HEIGHT;
+            if (startY < 0) startY = 0;
             currentPoint
                     .ifPresentOrElse(
                             x ->{

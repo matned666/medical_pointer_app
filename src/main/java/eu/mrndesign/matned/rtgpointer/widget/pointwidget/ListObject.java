@@ -101,7 +101,11 @@ public class ListObject extends AnchorPane implements IListObject {
 
     private double tryDouble(AtomicReference<Double> prev, TextField textField, int canvasMeasure) {
         try {
-            double d = Double.parseDouble(textField.getText());
+            double d = 0;
+            if (!textField.getText().isEmpty())
+            {
+               d = Double.parseDouble(textField.getText());
+            }
             if (d > canvasMeasure) d = canvasMeasure;
             if (d < 0) d = 0;
             prev.set(d);

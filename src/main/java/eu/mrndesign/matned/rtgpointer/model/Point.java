@@ -1,10 +1,12 @@
 package eu.mrndesign.matned.rtgpointer.model;
 
+import eu.mrndesign.matned.rtgpointer.utils.Variables;
+
 import java.util.Objects;
 
 import static eu.mrndesign.matned.rtgpointer.utils.Variables.POINT_RADIUS;
 
-public class Point implements IPoint{
+public class Point implements IPoint {
 
     private static final String DEFAULT_POINT_NAME = "Point";
     private String name;
@@ -26,9 +28,9 @@ public class Point implements IPoint{
     @Override
     public boolean isInRange(Double x, Double y) {
         return x >= this.x - POINT_RADIUS &&
-               x <= this.x + POINT_RADIUS &&
-               y >= this.y - POINT_RADIUS &&
-               y <= this.y + POINT_RADIUS;
+                x <= this.x + POINT_RADIUS &&
+                y >= this.y - POINT_RADIUS &&
+                y <= this.y + POINT_RADIUS;
     }
 
     @Override
@@ -63,12 +65,12 @@ public class Point implements IPoint{
 
     @Override
     public void setX(Double x) {
-        this.x=x;
+        this.x = x;
     }
 
     @Override
     public void setY(Double y) {
-        this.y=y;
+        this.y = y;
     }
 
     @Override
@@ -79,6 +81,17 @@ public class Point implements IPoint{
     @Override
     public PointColor getPointColor() {
         return color;
+    }
+
+    @Override
+    public String save() {
+        return new StringBuffer()
+                .append(name).append(Variables.STRINGSEPARATOR)
+                .append(pointId).append(Variables.STRINGSEPARATOR)
+                .append(x).append(Variables.STRINGSEPARATOR)
+                .append(y).append(Variables.STRINGSEPARATOR)
+                .append(color.getColorName()).append(Variables.STRINGSEPARATOR)
+                .append(isSelected ? 1 : 0).toString();
     }
 
     @Override
@@ -94,13 +107,4 @@ public class Point implements IPoint{
         return Objects.hash(name, pointId, x, y, color, isSelected);
     }
 
-    @Override
-    public String toString() {
-        return "Point{" +
-                "name='" + name + '\'' +
-                ", x=" + x +
-                ", y=" + y +
-                ", color=" + color +
-                '}';
-    }
 }

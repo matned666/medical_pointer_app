@@ -1,20 +1,34 @@
 package eu.mrndesign.matned.rtgpointer.service;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import eu.mrndesign.matned.rtgpointer.utils.Variables;
 import eu.mrndesign.matned.rtgpointer.widget.pointwidget.IGraphPoint;
 import eu.mrndesign.matned.rtgpointer.widget.pointwidget.IListObject;
 import eu.mrndesign.matned.rtgpointer.model.IPoint;
 import eu.mrndesign.matned.rtgpointer.model.Point;
 import eu.mrndesign.matned.rtgpointer.widget.*;
 import eu.mrndesign.matned.rtgpointer.widget.pointwidget.ListObject;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.sql.Timestamp;
+import java.text.NumberFormat;
+import java.time.LocalDateTime;
+import java.util.*;
 
 /**
  * PointService singleton class
@@ -36,9 +50,14 @@ public class PointService implements IPointService {
     }
 
 
-    private final List<IPoint> points;
+    private List<IPoint> points;
     private final List<IListObject> listObjects;
     private final List<IWidget> widgets;
+    private Label memoryInfoLabel;
+    private Label otherInfoLabel;
+    private long actualTime;
+    private Stage primaryStage;
+    private AnchorPane[] screens;
 
     private PointService() {
         if (instance != null) {
@@ -50,10 +69,30 @@ public class PointService implements IPointService {
     }
 
     @Override
+    public void appendOtherWidgets(Labeled... w){
+        this.memoryInfoLabel = (Label) w[0];
+        this.otherInfoLabel = (Label) w[1];
+        Button loadPointsButton = (Button) w[2];
+        Button clearPointsButton = (Button) w[3];
+        Button savePointsButton = (Button) w[4];
+        Button newPictureButton = (Button) w[5];
+        this.memoryInfoLabel.setText("<<Actual memory usage information>>");
+        this.otherInfoLabel.setText("<<Other information>>");
+        loadPointsButton.setOnMouseClicked(this::loadPointsButtonAction);
+        savePointsButton.setOnMouseClicked(this::savePointsButtonAction);
+        clearPointsButton.setOnMouseClicked(this::clearPointsButtonAction);
+        newPictureButton.setOnMouseClicked(this::newPictureButtonAction);
+    }
+
+    @Override
     public void refreshAll() {
+
         for (IWidget w : widgets) {
             refresh(w);
         }
+        memoryInfoLabel.setText(checkMemoryUsage());
+        otherInfoLabel.setText(checkOtherInformation(Timestamp.valueOf(LocalDateTime.now()).getTime() - actualTime));
+
     }
 
     @Override
@@ -90,6 +129,107 @@ public class PointService implements IPointService {
             points.stream().filter(IPoint::isSelected).forEach(IPoint::setSelected);
             point.setSelected();
         }
+    }
+
+    @Override
+    public void setActualTime(long actualTime) {
+        this.actualTime = actualTime;
+    }
+
+    @Override
+    public void setPrimaryStage(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+    }
+
+    @Override
+    public void appendPictureWidgets(AnchorPane... screen) {
+        this.screens = screen;
+    }
+
+    private void newPictureButtonAction(MouseEvent x) {
+        actualTime = Timestamp.valueOf(LocalDateTime.now()).getTime();
+        FileChooser fileChooser = new FileChooser();
+        File selectedFile = fileChooser.showOpenDialog(primaryStage);
+        Arrays.asList(screens).forEach(d->d.setBackground(Variables.BACKGROUND_IMAGE(selectedFile.getAbsolutePath())));
+    }
+
+    private void clearPointsButtonAction(MouseEvent x) {
+        actualTime = Timestamp.valueOf(LocalDateTime.now()).getTime();
+        points.clear();
+        refreshAll();
+    }
+
+    private void savePointsButtonAction(MouseEvent x) {
+        actualTime = Timestamp.valueOf(LocalDateTime.now()).getTime();
+        FileChooser fileChooser = new FileChooser();
+        File file = fileChooser.showSaveDialog(primaryStage);
+        if (file != null) {
+            saveTextToFile(new Gson().toJson(points), file);
+        }
+    }
+
+    private void saveTextToFile(String content, File file) {
+        try {
+            PrintWriter writer;
+            writer = new PrintWriter(file);
+            writer.println(content);
+            writer.close();
+        } catch (IOException ignored) {
+        }
+    }
+
+    private void loadPointsButtonAction(MouseEvent x) {
+        actualTime = Timestamp.valueOf(LocalDateTime.now()).getTime();
+        FileChooser fileChooser = new FileChooser();
+        File file = fileChooser.showOpenDialog(primaryStage);
+        if (file != null) {
+            loadFromFile(file);
+        }
+        refreshAll();
+    }
+
+    private void loadFromFile(File file) {
+        StringBuilder content = new StringBuilder();
+        try (Scanner scanner = new Scanner(file) ){
+
+            while (scanner.hasNext())
+                content.append(scanner.next());
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        List<Point> _points = new Gson().fromJson(content.toString(), new TypeToken<List<Point>>(){}.getType());
+        points.clear();
+        points.addAll(_points);
+        refreshAll();
+    }
+
+    private String checkOtherInformation(long refreshRateInMS) {
+        return "Actual refresh time in ms: " + refreshRateInMS + " " +
+                "Number of points: " + points.size();
+    }
+
+    private String checkMemoryUsage() {
+        Runtime runtime = Runtime.getRuntime();
+
+        NumberFormat format = NumberFormat.getInstance();
+
+        StringBuilder sb = new StringBuilder();
+        long maxMemory = runtime.maxMemory();
+        long allocatedMemory = runtime.totalMemory();
+        long freeMemory = runtime.freeMemory();
+
+        sb.append("Actual memory usage: ");
+        sb.append("free memory: ").append(format.format(freeMemory / 1024)).append(" ");
+        sb.append("allocated memory: ").append(format.format(allocatedMemory / 1024)).append(" ");
+        sb.append("max memory: ").append(format.format(maxMemory / 1024)).append(" ");
+        sb.append("total free memory: ").append(format.format((freeMemory + (maxMemory - allocatedMemory)) / 1024)).append("\n");
+
+        System.out.println(sb);
+
+        return sb.toString();
+
     }
 
     private void refreshListObjects() {

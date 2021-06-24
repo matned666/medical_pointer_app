@@ -18,5 +18,5 @@ public interface IPoint {
     PointColor getPointColor();
 
 
-
+    String save();
 }

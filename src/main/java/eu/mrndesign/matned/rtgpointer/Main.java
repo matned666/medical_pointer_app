@@ -15,13 +15,14 @@ public class Main extends Application {
         loader.setLocation(getClass()
                 .getResource("/picturepointer.fxml"));
         AnchorPane anchorPane = loader.load();
-        loader.getController();
+        PointController pointController = loader.getController();
         primaryStage.setTitle("RTG Pointer");
         Scene scene = new Scene(anchorPane);
 
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();
+        pointController.setPrimaryStage(primaryStage);
     }
 
 

@@ -10,13 +10,36 @@ import eu.mrndesign.matned.rtgpointer.widget.WorkCanvas;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class PointController implements Initializable {
+
+    private Stage primaryStage;
+
+    @FXML
+    private Button loadPointsButton;
+
+    @FXML
+    private Button savePointsButton;
+
+    @FXML
+    private Button clearPointsButton;
+
+    @FXML
+    private Button newPictureButton;
+
+    @FXML
+    private Label memoryInfo;
+
+    @FXML
+    private Label otherInfo;
 
     @FXML
     private ScrollPane leftScrollPane;
@@ -42,10 +65,10 @@ public class PointController implements Initializable {
 
 
         IPointService mainService = PointService.getInstance();
-        screen1.setBackground(Variables.BACKGROUND_RTG_IMAGE);
-        screen2.setBackground(Variables.BACKGROUND_RTG_IMAGE);
-        screen3.setBackground(Variables.BACKGROUND_RTG_IMAGE);
-        screen4.setBackground(Variables.BACKGROUND_RTG_IMAGE);
+        screen1.setBackground(Variables.BACKGROUND_IMAGE(Variables.MAIN_PICTURE));
+        screen2.setBackground(Variables.BACKGROUND_IMAGE(Variables.MAIN_PICTURE));
+        screen3.setBackground(Variables.BACKGROUND_IMAGE(Variables.MAIN_PICTURE));
+        screen4.setBackground(Variables.BACKGROUND_IMAGE(Variables.MAIN_PICTURE));
 
         IWorkCanvas canvas1 = new WorkCanvas();
         IWorkCanvas canvas2 = new WorkCanvas();
@@ -61,7 +84,16 @@ public class PointController implements Initializable {
         screen4.getChildren().add((Node) canvas4);
 
         mainService.applyWidgets(canvas1, canvas2, canvas3, canvas4, pointList);
+        mainService.appendOtherWidgets(memoryInfo, otherInfo, loadPointsButton, clearPointsButton, savePointsButton, newPictureButton);
+        mainService.appendPictureWidgets(screen1,
+                screen2,
+                screen3,
+                screen4);
+        mainService.setPrimaryStage(primaryStage);
     }
 
 
+    public void setPrimaryStage(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+    }
 }

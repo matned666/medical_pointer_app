@@ -16,11 +16,14 @@ public class Variables {
 
 
     public static final Background BACKGROUND_BLACK = new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY));
+    public static final String STRINGSEPARATOR = ";";
 
-    private static final File file = new File(Variables.MAIN_PICTURE);
-    private static final Image image = new Image(file.toURI().toString());
-    public static final BackgroundImage rtgImage = new BackgroundImage(image,
-            BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
-            new BackgroundSize(100, 100, true, true, true, true));
-    public static final Background BACKGROUND_RTG_IMAGE = new Background(rtgImage);
+    public static Background BACKGROUND_IMAGE(String pathToImage){
+        File file = new File(pathToImage);
+        Image image = new Image(file.toURI().toString());
+        return new Background(new BackgroundImage(image,
+                BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
+                new BackgroundSize(100, 100, true, true, true, true)));
+
+    }
 }

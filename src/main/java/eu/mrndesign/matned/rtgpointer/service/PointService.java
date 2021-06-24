@@ -9,13 +9,9 @@ import eu.mrndesign.matned.rtgpointer.model.IPoint;
 import eu.mrndesign.matned.rtgpointer.model.Point;
 import eu.mrndesign.matned.rtgpointer.widget.*;
 import eu.mrndesign.matned.rtgpointer.widget.pointwidget.ListObject;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Labeled;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -24,7 +20,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.text.NumberFormat;
 import java.time.LocalDateTime;
@@ -50,7 +45,7 @@ public class PointService implements IPointService {
     }
 
 
-    private List<IPoint> points;
+    private final List<IPoint> points;
     private final List<IListObject> listObjects;
     private final List<IWidget> widgets;
     private Label memoryInfoLabel;
@@ -174,7 +169,9 @@ public class PointService implements IPointService {
             writer = new PrintWriter(file);
             writer.println(content);
             writer.close();
-        } catch (IOException ignored) {
+        } catch (IOException e) {
+            alertDialog(e.getMessage());
+
         }
     }
 
@@ -196,13 +193,27 @@ public class PointService implements IPointService {
                 content.append(scanner.next());
 
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            alertDialog(e.getMessage());
         }
 
-        List<Point> _points = new Gson().fromJson(content.toString(), new TypeToken<List<Point>>(){}.getType());
-        points.clear();
-        points.addAll(_points);
+        try {
+            points.clear();
+            listObjects.clear();
+            points.addAll(new Gson().fromJson(content.toString(), new TypeToken<List<Point>>(){}.getType()));
+
+        }catch (Exception e){
+            alertDialog(e.getMessage());
+        }
         refreshAll();
+    }
+
+    private void alertDialog(String message) {
+        Alert alert = new Alert(Alert.AlertType.WARNING, message, ButtonType.OK);
+        alert.showAndWait();
+
+        if (alert.getResult() == ButtonType.OK) {
+            alert.close();
+        }
     }
 
     private String checkOtherInformation(long refreshRateInMS) {

@@ -7,6 +7,8 @@ import eu.mrndesign.matned.rtgpointer.service.PointService;
 import eu.mrndesign.matned.rtgpointer.widget.IPointList;
 import javafx.geometry.Insets;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -71,33 +73,43 @@ public class ListObject extends AnchorPane implements IListObject {
     private void setFieldsKeyListeners() {
         AtomicReference<Double> xPrev = new AtomicReference<>(Double.parseDouble(xTextField.getText()));
         AtomicReference<Double> yPrev = new AtomicReference<>(Double.parseDouble(yTextField.getText()));
-        xTextField.setOnKeyReleased(x -> xFieldKeyListener(xPrev));
-        yTextField.setOnKeyReleased(x -> yFieldKeyListener(yPrev));
+        xTextField.setOnKeyReleased(x -> xFieldKeyListener(xPrev,x));
+        yTextField.setOnKeyReleased(x -> yFieldKeyListener(yPrev,x));
     }
 
-    private void yFieldKeyListener(AtomicReference<Double> yPrev) {
-        try {
-            double d = Double.parseDouble(yTextField.getText());
-            if (d > CANVAS_HEIGHT) d = CANVAS_HEIGHT;
-            if (d < 0) d = 0;
-            yPrev.set(d);
-            point.setY(d);
-            pointService.refreshAll();
-        } catch (Exception e) {
-            yTextField.setText(yPrev.get().toString());
-        }
+    private void confirmY(double d) {
+        point.setY(d);
+        pointService.refreshAll();
     }
 
-    private void xFieldKeyListener(AtomicReference<Double> xPrev) {
+    private void confirmX(double d) {
+        point.setX(d);
+        pointService.refreshAll();
+    }
+
+    private void yFieldKeyListener(AtomicReference<Double> yPrev, KeyEvent e) {
+        double d = tryDouble(yPrev, yTextField, CANVAS_HEIGHT);
+        if (e.getCode().equals(KeyCode.ENTER))
+            confirmY(d);
+    }
+
+    private void xFieldKeyListener(AtomicReference<Double> xPrev, KeyEvent e) {
+        double d = tryDouble(xPrev, xTextField, CANVAS_WIDTH);
+        if (e.getCode().equals(KeyCode.ENTER))
+            confirmX(d);
+    }
+
+    private double tryDouble(AtomicReference<Double> prev, TextField textField, int canvasMeasure) {
         try {
-            double d = Double.parseDouble(xTextField.getText());
-            if (d > CANVAS_WIDTH) d = CANVAS_WIDTH;
+            double d = Double.parseDouble(textField.getText());
+            if (d > canvasMeasure) d = canvasMeasure;
             if (d < 0) d = 0;
-            xPrev.set(d);
-            point.setX(d);
-            pointService.refreshAll();
-        } catch (Exception e) {
-            xTextField.setText(xPrev.get().toString());
+            prev.set(d);
+            return d;
+
+        } catch (Exception ex) {
+            textField.setText(prev.get().toString());
+            return prev.get();
         }
     }
 

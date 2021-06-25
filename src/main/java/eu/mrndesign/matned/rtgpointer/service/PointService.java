@@ -183,6 +183,7 @@ public class PointService implements IPointService {
         FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(primaryStage);
         if (file != null) {
+            clearPointsButtonAction(x);
             loadFromFile(file);
         }
         refreshAll();

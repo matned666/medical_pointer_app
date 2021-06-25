@@ -117,7 +117,7 @@ public class PointService implements IPointService {
 
     @Override
     public void insertNewPoint(double x, double y) {
-        points.add(new Point(getLastId() + 1, x, y, 1 ));
+        points.add(new Point(getLastId() + 1, x, y, getLastColor() ));
     }
 
     @Override
@@ -294,7 +294,7 @@ public class PointService implements IPointService {
     }
 
     private int getLastColor() {
-        return getLastPoint() != null ? getLastPoint().getPointColor().getColorId() : 0;
+        return getLastPoint() != null ? getLastPoint().getPointColor().getColorId() : 1;
     }
 
     private IPoint getLastPoint() {

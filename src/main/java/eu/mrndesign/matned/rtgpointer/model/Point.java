@@ -12,7 +12,7 @@ public class Point implements IPoint {
     private final Long pointId;
     private Double x;
     private Double y;
-    private final PointColor color;
+    private PointColor color;
     private boolean isSelected;
 
     public Point(Long pointId, Double x, Double y, int colorNumber) {
@@ -75,6 +75,11 @@ public class Point implements IPoint {
     @Override
     public PointColor getPointColor() {
         return color;
+    }
+
+    @Override
+    public void setColor(PointColor byNum) {
+        color = byNum;
     }
 
     @Override

@@ -24,11 +24,11 @@ public class ListObject extends AnchorPane implements IListObject {
 
     private final IPoint point;
 
-    private final PointColor color;
+    private PointColor color;
     private TextField xTextField;
     private TextField yTextField;
+    private Text nameTxt;
     private final IPointService pointService = PointService.getInstance();
-    private Button deleteBtn;
 
     public ListObject(IPoint point, IPointList root) {
         this.point = point;
@@ -40,21 +40,7 @@ public class ListObject extends AnchorPane implements IListObject {
         border();
         textFields();
         deleteBtn();
-    }
-
-    private void deleteBtn() {
-        deleteBtn = new Button("X");
-        deleteBtn.setStyle(
-                        "-fx-background-color: darkred;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-text-fill: white;"
-        );
-        deleteBtn.setMaxHeight(15);
-        deleteBtn.setMaxWidth(15);
-        AnchorPane.setTopAnchor(deleteBtn,30.0);
-        AnchorPane.setLeftAnchor(deleteBtn, 255.0);
-        this.getChildren().add(deleteBtn);
-        deleteBtn.setOnMouseClicked(x-> pointService.removePoint(point));
+        changeColorButton();
     }
 
     @Override
@@ -66,6 +52,49 @@ public class ListObject extends AnchorPane implements IListObject {
     public void update() {
         xTextField.setText(point.getX().toString());
         yTextField.setText(point.getY().toString());
+    }
+
+    @Override
+    public void setPointColor(PointColor pointColor) {
+        this.color = pointColor;
+    }
+
+    private void changeColorButton() {
+        Button changeColor = new Button("chnage color");
+        changeColor.setStyle(
+                "-fx-background-color: black;" +
+                        "-fx-border-width: 1px;" +
+                        "-fx-border-color: grey;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-text-fill: grey;"+
+                        "-fx-font-size:8"
+        );
+        changeColor.setMaxHeight(5);
+        changeColor.setMaxWidth(230);
+        AnchorPane.setTopAnchor(changeColor,7.0);
+        AnchorPane.setLeftAnchor(changeColor, 50.0);
+        this.getChildren().add(changeColor);
+        changeColor.setOnMouseClicked(x-> {
+            color = PointColor.getByNum(point.getPointColor().getColorId()+1);
+            point.setColor(color);
+            nameTxt.setFill(color.getColor());
+            pointService.refreshAll();
+        });
+    }
+
+    private void deleteBtn() {
+        Button deleteBtn = new Button("X");
+        deleteBtn.setStyle(
+                "-fx-background-color: darkred;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-text-fill: white;"
+        );
+        deleteBtn.setMaxHeight(15);
+        deleteBtn.setMaxWidth(15);
+        AnchorPane.setTopAnchor(deleteBtn,30.0);
+        AnchorPane.setLeftAnchor(deleteBtn, 255.0);
+        this.getChildren().add(deleteBtn);
+        deleteBtn.setOnMouseClicked(x-> pointService.removePoint(point));
     }
 
     private void textFields() {
@@ -135,7 +164,7 @@ public class ListObject extends AnchorPane implements IListObject {
     }
 
     private void labels(IPoint point) {
-        Text nameTxt = new Text(point.getName());
+        nameTxt = new Text(point.getName());
         nameTxt.setFill(color.getColor());
         AnchorPane.setTopAnchor(nameTxt, 10.0);
         AnchorPane.setLeftAnchor(nameTxt, 10.0);

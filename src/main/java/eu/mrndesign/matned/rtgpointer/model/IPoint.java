@@ -16,4 +16,5 @@ public interface IPoint {
     void setSelected();
     PointColor getPointColor();
 
+    void setColor(PointColor byNum);
 }

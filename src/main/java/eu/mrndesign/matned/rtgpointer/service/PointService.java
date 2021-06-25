@@ -276,6 +276,7 @@ public class PointService implements IPointService {
                     ((VBox) obj).getChildren().remove((Node) x);
             });
         }
+
     }
 
     private void refreshCanvas(IWidget obj) {

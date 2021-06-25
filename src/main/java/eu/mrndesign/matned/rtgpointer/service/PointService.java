@@ -117,7 +117,7 @@ public class PointService implements IPointService {
 
     @Override
     public void insertNewPoint(double x, double y) {
-        points.add(new Point(getLastId() + 1, x, y, getLastColor() + 1));
+        points.add(new Point(getLastId() + 1, x, y, 1 ));
     }
 
     @Override

@@ -8,7 +8,7 @@ public interface IGraphPoint extends IGraphObject{
     void draw(GraphicsContext context);
 
     static IGraphPoint applyData(IPoint model){
-        return new GraphPoint(model.getX(), model.getY(), model.getPointColor());
+        return new GraphPoint(model.getId(), model.getX(), model.getY(), model.getPointColor());
     }
 
 

@@ -71,8 +71,8 @@ public class ListObject extends AnchorPane implements IListObject {
         );
         changeColor.setMaxHeight(5);
         changeColor.setMaxWidth(230);
-        AnchorPane.setTopAnchor(changeColor,7.0);
-        AnchorPane.setLeftAnchor(changeColor, 50.0);
+        AnchorPane.setTopAnchor(changeColor,9.0);
+        AnchorPane.setLeftAnchor(changeColor, 100.0);
         this.getChildren().add(changeColor);
         changeColor.setOnMouseClicked(x-> {
             color = PointColor.getByNum(point.getPointColor().getColorId()+1);
@@ -114,6 +114,29 @@ public class ListObject extends AnchorPane implements IListObject {
         this.getChildren().add(yTextField);
         setFieldsKeyListeners();
 
+    }
+
+    private void labels(IPoint point) {
+        nameTxt = new Text(point.getName());
+        nameTxt.setFill(color.getColor());
+        Text id = new Text("Id: " + point.getId());
+        AnchorPane.setTopAnchor(id, 10.0);
+        AnchorPane.setLeftAnchor(id, 10.0);
+        AnchorPane.setTopAnchor(nameTxt, 10.0);
+        AnchorPane.setLeftAnchor(nameTxt, 60.0);
+        Text xTxt = new Text("x=");
+        Text yTxt = new Text("y=");
+        id.setFill(Color.GRAY);
+        xTxt.setFill(Color.GRAY);
+        yTxt.setFill(Color.GRAY);
+        AnchorPane.setTopAnchor(xTxt, 35.0);
+        AnchorPane.setLeftAnchor(xTxt, 10.0);
+        AnchorPane.setTopAnchor(yTxt, 35.0);
+        AnchorPane.setLeftAnchor(yTxt, 130.0);
+        this.getChildren().add(nameTxt);
+        this.getChildren().add(id);
+        this.getChildren().add(xTxt);
+        this.getChildren().add(yTxt);
     }
 
     private void setFieldsKeyListeners() {
@@ -161,24 +184,6 @@ public class ListObject extends AnchorPane implements IListObject {
             textField.setText(prev.get().toString());
             return prev.get();
         }
-    }
-
-    private void labels(IPoint point) {
-        nameTxt = new Text(point.getName());
-        nameTxt.setFill(color.getColor());
-        AnchorPane.setTopAnchor(nameTxt, 10.0);
-        AnchorPane.setLeftAnchor(nameTxt, 10.0);
-        Text xTxt = new Text("x=");
-        Text yTxt = new Text("y=");
-        xTxt.setFill(Color.GRAY);
-        yTxt.setFill(Color.GRAY);
-        AnchorPane.setTopAnchor(xTxt, 35.0);
-        AnchorPane.setLeftAnchor(xTxt, 10.0);
-        AnchorPane.setTopAnchor(yTxt, 35.0);
-        AnchorPane.setLeftAnchor(yTxt, 130.0);
-        this.getChildren().add(nameTxt);
-        this.getChildren().add(xTxt);
-        this.getChildren().add(yTxt);
     }
 
     private void border() {

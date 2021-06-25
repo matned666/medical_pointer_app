@@ -77,11 +77,18 @@ public class PointController implements Initializable {
         IPointList pointList = new PointList();
 
         leftScrollPane.setContent((Node) pointList);
+        leftScrollPane.setStyle("-fx-background: rgb(0,0,0);\n -fx-background-color: rgb(0,0,0); -fx-border-width: 2px; -fx-border-color: rgb(40,40,40)");
+
 
         screen1.getChildren().add((Node) canvas1);
         screen2.getChildren().add((Node) canvas2);
         screen3.getChildren().add((Node) canvas3);
         screen4.getChildren().add((Node) canvas4);
+
+        screen1.setStyle("-fx-border-width: 2px; -fx-border-color: rgb(40,40,40)");
+        screen2.setStyle("-fx-border-width: 2px; -fx-border-color: rgb(40,40,40)");
+        screen3.setStyle("-fx-border-width: 2px; -fx-border-color: rgb(40,40,40)");
+        screen4.setStyle("-fx-border-width: 2px; -fx-border-color: rgb(40,40,40)");
 
         mainService.applyWidgets(canvas1, canvas2, canvas3, canvas4, pointList);
         mainService.appendOtherWidgets(memoryInfo, otherInfo, loadPointsButton, clearPointsButton, savePointsButton, newPictureButton);

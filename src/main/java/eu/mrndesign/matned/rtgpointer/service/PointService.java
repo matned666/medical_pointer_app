@@ -57,10 +57,12 @@ public class PointService implements IPointService {
     private PointService() {
         if (instance != null) {
             throw new IllegalStateException("Cannot create new instance, please use getInstance method instead.");
+        }else {
+            instance = this;
+            points = new ArrayList<>();
+            listObjects = new ArrayList<>();
+            widgets = new ArrayList<>();
         }
-        points = new ArrayList<>();
-        listObjects = new ArrayList<>();
-        widgets = new ArrayList<>();
     }
 
     @Override
@@ -170,6 +172,7 @@ public class PointService implements IPointService {
             writer.println(content);
             writer.close();
         } catch (IOException e) {
+            e.printStackTrace();
             alertDialog(e.getMessage());
 
         }
@@ -193,6 +196,7 @@ public class PointService implements IPointService {
                 content.append(scanner.next());
 
         } catch (FileNotFoundException e) {
+            e.printStackTrace();
             alertDialog(e.getMessage());
         }
 
@@ -202,6 +206,7 @@ public class PointService implements IPointService {
             points.addAll(new Gson().fromJson(content.toString(), new TypeToken<List<Point>>(){}.getType()));
 
         }catch (Exception e){
+            e.printStackTrace();
             alertDialog(e.getMessage());
         }
         refreshAll();

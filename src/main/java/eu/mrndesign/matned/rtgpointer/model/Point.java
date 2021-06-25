@@ -1,6 +1,5 @@
 package eu.mrndesign.matned.rtgpointer.model;
 
-import eu.mrndesign.matned.rtgpointer.utils.Variables;
 
 import java.util.Objects;
 
@@ -9,7 +8,7 @@ import static eu.mrndesign.matned.rtgpointer.utils.Variables.POINT_RADIUS;
 public class Point implements IPoint {
 
     private static final String DEFAULT_POINT_NAME = "Point";
-    private String name;
+    private final String name;
     private final Long pointId;
     private Double x;
     private Double y;
@@ -59,11 +58,6 @@ public class Point implements IPoint {
     }
 
     @Override
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
     public void setX(Double x) {
         this.x = x;
     }
@@ -81,17 +75,6 @@ public class Point implements IPoint {
     @Override
     public PointColor getPointColor() {
         return color;
-    }
-
-    @Override
-    public String save() {
-        return new StringBuffer()
-                .append(name).append(Variables.STRINGSEPARATOR)
-                .append(pointId).append(Variables.STRINGSEPARATOR)
-                .append(x).append(Variables.STRINGSEPARATOR)
-                .append(y).append(Variables.STRINGSEPARATOR)
-                .append(color.getColorName()).append(Variables.STRINGSEPARATOR)
-                .append(isSelected ? 1 : 0).toString();
     }
 
     @Override

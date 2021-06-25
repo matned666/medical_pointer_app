@@ -143,6 +143,12 @@ public class PointService implements IPointService {
         this.screens = screen;
     }
 
+    @Override
+    public void removePoint(IPoint point) {
+        points.remove(point);
+        refreshAll();
+    }
+
     private void newPictureButtonAction(MouseEvent x) {
         actualTime = Timestamp.valueOf(LocalDateTime.now()).getTime();
         FileChooser fileChooser = new FileChooser();

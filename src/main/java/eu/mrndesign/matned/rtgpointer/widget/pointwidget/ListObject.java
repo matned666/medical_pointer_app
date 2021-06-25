@@ -6,6 +6,7 @@ import eu.mrndesign.matned.rtgpointer.service.IPointService;
 import eu.mrndesign.matned.rtgpointer.service.PointService;
 import eu.mrndesign.matned.rtgpointer.widget.IPointList;
 import javafx.geometry.Insets;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -27,6 +28,7 @@ public class ListObject extends AnchorPane implements IListObject {
     private TextField xTextField;
     private TextField yTextField;
     private final IPointService pointService = PointService.getInstance();
+    private Button deleteBtn;
 
     public ListObject(IPoint point, IPointList root) {
         this.point = point;
@@ -37,7 +39,22 @@ public class ListObject extends AnchorPane implements IListObject {
         labels(point);
         border();
         textFields();
+        deleteBtn();
+    }
 
+    private void deleteBtn() {
+        deleteBtn = new Button("X");
+        deleteBtn.setStyle(
+                        "-fx-background-color: darkred;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-text-fill: white;"
+        );
+        deleteBtn.setMaxHeight(15);
+        deleteBtn.setMaxWidth(15);
+        AnchorPane.setTopAnchor(deleteBtn,30.0);
+        AnchorPane.setLeftAnchor(deleteBtn, 255.0);
+        this.getChildren().add(deleteBtn);
+        deleteBtn.setOnMouseClicked(x-> pointService.removePoint(point));
     }
 
     @Override

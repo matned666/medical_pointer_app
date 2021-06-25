@@ -27,4 +27,6 @@ public interface IPointService {
     void setPrimaryStage(Stage primaryStage);
 
     void appendPictureWidgets(AnchorPane... screen);
+
+    void removePoint(IPoint point);
 }

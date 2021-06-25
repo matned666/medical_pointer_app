@@ -32,7 +32,7 @@ VM settings: <br>
 RUN AND BE HAPPY!
 
 
-![Screenshot](https://raw.githubusercontent.com/matned666/medical_pointer_app/screenshot.png)
+![Screenshot](https://raw.githubusercontent.com/matned666/medical_pointer_app/Matned/screenshot.png)
 
 ------------------------------
 #Tests

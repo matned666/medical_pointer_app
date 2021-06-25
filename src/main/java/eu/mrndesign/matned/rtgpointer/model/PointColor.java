@@ -10,7 +10,6 @@ public enum PointColor {
     GREEN,
     MAGENTA,
     CYAN,
-    PINK,
     WHITE,
     BLACK;
 

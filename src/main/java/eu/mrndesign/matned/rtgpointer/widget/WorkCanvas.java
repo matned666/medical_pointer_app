@@ -5,6 +5,8 @@ import eu.mrndesign.matned.rtgpointer.service.IPointService;
 import eu.mrndesign.matned.rtgpointer.service.PointService;
 import javafx.scene.canvas.Canvas;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static eu.mrndesign.matned.rtgpointer.utils.Variables.CANVAS_HEIGHT;
@@ -32,6 +34,7 @@ public class WorkCanvas extends Canvas implements IWorkCanvas {
 
     private void setOnMouseDragListener() {
         this.setOnMouseDragged(event -> {
+            pointService.setActualTime(Timestamp.valueOf(LocalDateTime.now()).getTime());
             startX = event.getX();
             startY = event.getY();
             if (startX > CANVAS_WIDTH) startX = CANVAS_WIDTH;
@@ -65,6 +68,7 @@ public class WorkCanvas extends Canvas implements IWorkCanvas {
 
     private void setOnMousePressedListener() {
         this.setOnMousePressed(event->{
+            pointService.setActualTime(Timestamp.valueOf(LocalDateTime.now()).getTime());
             startX = event.getX();
             startY = event.getY();
             currentPoint=pointService.getPoint(startX, startY);

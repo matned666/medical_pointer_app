@@ -6,7 +6,10 @@ import eu.mrndesign.matned.rtgpointer.service.IPointService;
 import eu.mrndesign.matned.rtgpointer.service.PointService;
 import eu.mrndesign.matned.rtgpointer.widget.IPointList;
 import javafx.geometry.Insets;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -21,9 +24,10 @@ public class ListObject extends AnchorPane implements IListObject {
 
     private final IPoint point;
 
-    private final PointColor color;
+    private PointColor color;
     private TextField xTextField;
     private TextField yTextField;
+    private Text nameTxt;
     private final IPointService pointService = PointService.getInstance();
 
     public ListObject(IPoint point, IPointList root) {
@@ -35,7 +39,8 @@ public class ListObject extends AnchorPane implements IListObject {
         labels(point);
         border();
         textFields();
-
+        deleteBtn();
+        changeColorButton();
     }
 
     @Override
@@ -47,6 +52,49 @@ public class ListObject extends AnchorPane implements IListObject {
     public void update() {
         xTextField.setText(point.getX().toString());
         yTextField.setText(point.getY().toString());
+    }
+
+    @Override
+    public void setPointColor(PointColor pointColor) {
+        this.color = pointColor;
+    }
+
+    private void changeColorButton() {
+        Button changeColor = new Button("chnage color");
+        changeColor.setStyle(
+                "-fx-background-color: black;" +
+                        "-fx-border-width: 1px;" +
+                        "-fx-border-color: grey;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-text-fill: grey;"+
+                        "-fx-font-size:8"
+        );
+        changeColor.setMaxHeight(5);
+        changeColor.setMaxWidth(230);
+        AnchorPane.setTopAnchor(changeColor,9.0);
+        AnchorPane.setLeftAnchor(changeColor, 100.0);
+        this.getChildren().add(changeColor);
+        changeColor.setOnMouseClicked(x-> {
+            color = PointColor.getByNum(point.getPointColor().getColorId()+1);
+            point.setColor(color);
+            nameTxt.setFill(color.getColor());
+            pointService.refreshAll();
+        });
+    }
+
+    private void deleteBtn() {
+        Button deleteBtn = new Button("X");
+        deleteBtn.setStyle(
+                "-fx-background-color: darkred;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-text-fill: white;"
+        );
+        deleteBtn.setMaxHeight(15);
+        deleteBtn.setMaxWidth(15);
+        AnchorPane.setTopAnchor(deleteBtn,30.0);
+        AnchorPane.setLeftAnchor(deleteBtn, 255.0);
+        this.getChildren().add(deleteBtn);
+        deleteBtn.setOnMouseClicked(x-> pointService.removePoint(point));
     }
 
     private void textFields() {
@@ -68,46 +116,17 @@ public class ListObject extends AnchorPane implements IListObject {
 
     }
 
-    private void setFieldsKeyListeners() {
-        AtomicReference<Double> xPrev = new AtomicReference<>(Double.parseDouble(xTextField.getText()));
-        AtomicReference<Double> yPrev = new AtomicReference<>(Double.parseDouble(yTextField.getText()));
-        xTextField.setOnKeyReleased(x -> xFieldKeyListener(xPrev));
-        yTextField.setOnKeyReleased(x -> yFieldKeyListener(yPrev));
-    }
-
-    private void yFieldKeyListener(AtomicReference<Double> yPrev) {
-        try {
-            double d = Double.parseDouble(yTextField.getText());
-            if (d > CANVAS_HEIGHT) d = CANVAS_HEIGHT;
-            if (d < 0) d = 0;
-            yPrev.set(d);
-            point.setY(d);
-            pointService.refreshAll();
-        } catch (Exception e) {
-            yTextField.setText(yPrev.get().toString());
-        }
-    }
-
-    private void xFieldKeyListener(AtomicReference<Double> xPrev) {
-        try {
-            double d = Double.parseDouble(xTextField.getText());
-            if (d > CANVAS_WIDTH) d = CANVAS_WIDTH;
-            if (d < 0) d = 0;
-            xPrev.set(d);
-            point.setX(d);
-            pointService.refreshAll();
-        } catch (Exception e) {
-            xTextField.setText(xPrev.get().toString());
-        }
-    }
-
     private void labels(IPoint point) {
-        Text nameTxt = new Text(point.getName());
+        nameTxt = new Text(point.getName());
         nameTxt.setFill(color.getColor());
+        Text id = new Text("Id: " + point.getId());
+        AnchorPane.setTopAnchor(id, 10.0);
+        AnchorPane.setLeftAnchor(id, 10.0);
         AnchorPane.setTopAnchor(nameTxt, 10.0);
-        AnchorPane.setLeftAnchor(nameTxt, 10.0);
+        AnchorPane.setLeftAnchor(nameTxt, 60.0);
         Text xTxt = new Text("x=");
         Text yTxt = new Text("y=");
+        id.setFill(Color.GRAY);
         xTxt.setFill(Color.GRAY);
         yTxt.setFill(Color.GRAY);
         AnchorPane.setTopAnchor(xTxt, 35.0);
@@ -115,8 +134,56 @@ public class ListObject extends AnchorPane implements IListObject {
         AnchorPane.setTopAnchor(yTxt, 35.0);
         AnchorPane.setLeftAnchor(yTxt, 130.0);
         this.getChildren().add(nameTxt);
+        this.getChildren().add(id);
         this.getChildren().add(xTxt);
         this.getChildren().add(yTxt);
+    }
+
+    private void setFieldsKeyListeners() {
+        AtomicReference<Double> xPrev = new AtomicReference<>(Double.parseDouble(xTextField.getText()));
+        AtomicReference<Double> yPrev = new AtomicReference<>(Double.parseDouble(yTextField.getText()));
+        xTextField.setOnKeyReleased(x -> xFieldKeyListener(xPrev,x));
+        yTextField.setOnKeyReleased(x -> yFieldKeyListener(yPrev,x));
+    }
+
+    private void confirmY(double d) {
+        point.setY(d);
+        pointService.refreshAll();
+    }
+
+    private void confirmX(double d) {
+        point.setX(d);
+        pointService.refreshAll();
+    }
+
+    private void yFieldKeyListener(AtomicReference<Double> yPrev, KeyEvent e) {
+        double d = tryDouble(yPrev, yTextField, CANVAS_HEIGHT);
+        if (e.getCode().equals(KeyCode.ENTER))
+            confirmY(d);
+    }
+
+    private void xFieldKeyListener(AtomicReference<Double> xPrev, KeyEvent e) {
+        double d = tryDouble(xPrev, xTextField, CANVAS_WIDTH);
+        if (e.getCode().equals(KeyCode.ENTER))
+            confirmX(d);
+    }
+
+    private double tryDouble(AtomicReference<Double> prev, TextField textField, int canvasMeasure) {
+        try {
+            double d = 0;
+            if (!textField.getText().isEmpty())
+            {
+               d = Double.parseDouble(textField.getText());
+            }
+            if (d > canvasMeasure) d = canvasMeasure;
+            if (d < 0) d = 0;
+            prev.set(d);
+            return d;
+
+        } catch (Exception ex) {
+            textField.setText(prev.get().toString());
+            return prev.get();
+        }
     }
 
     private void border() {

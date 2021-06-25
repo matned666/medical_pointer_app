@@ -1,5 +1,6 @@
 package eu.mrndesign.matned.rtgpointer;
 
+import eu.mrndesign.matned.rtgpointer.utils.Variables;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -15,13 +16,15 @@ public class Main extends Application {
         loader.setLocation(getClass()
                 .getResource("/picturepointer.fxml"));
         AnchorPane anchorPane = loader.load();
-        loader.getController();
+        PointController pointController = loader.getController();
         primaryStage.setTitle("RTG Pointer");
         Scene scene = new Scene(anchorPane);
 
+        anchorPane.setBackground(Variables.BACKGROUND_BLACK);
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();
+        pointController.setPrimaryStage(primaryStage);
     }
 
 

@@ -10,11 +10,10 @@ public enum PointColor {
     GREEN,
     MAGENTA,
     CYAN,
-    PINK,
     WHITE,
     BLACK;
 
-    static PointColor getByNum(int num){
+    public static PointColor getByNum(int num){
         int number = getCorrectNum(num);
         switch (number){
             case 7: return WHITE;

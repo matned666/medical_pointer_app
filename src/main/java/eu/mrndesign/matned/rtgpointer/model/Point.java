@@ -1,17 +1,18 @@
 package eu.mrndesign.matned.rtgpointer.model;
 
+
 import java.util.Objects;
 
 import static eu.mrndesign.matned.rtgpointer.utils.Variables.POINT_RADIUS;
 
-public class Point implements IPoint{
+public class Point implements IPoint {
 
     private static final String DEFAULT_POINT_NAME = "Point";
-    private String name;
+    private final String name;
     private final Long pointId;
     private Double x;
     private Double y;
-    private final PointColor color;
+    private PointColor color;
     private boolean isSelected;
 
     public Point(Long pointId, Double x, Double y, int colorNumber) {
@@ -26,9 +27,9 @@ public class Point implements IPoint{
     @Override
     public boolean isInRange(Double x, Double y) {
         return x >= this.x - POINT_RADIUS &&
-               x <= this.x + POINT_RADIUS &&
-               y >= this.y - POINT_RADIUS &&
-               y <= this.y + POINT_RADIUS;
+                x <= this.x + POINT_RADIUS &&
+                y >= this.y - POINT_RADIUS &&
+                y <= this.y + POINT_RADIUS;
     }
 
     @Override
@@ -57,18 +58,13 @@ public class Point implements IPoint{
     }
 
     @Override
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
     public void setX(Double x) {
-        this.x=x;
+        this.x = x;
     }
 
     @Override
     public void setY(Double y) {
-        this.y=y;
+        this.y = y;
     }
 
     @Override
@@ -79,6 +75,11 @@ public class Point implements IPoint{
     @Override
     public PointColor getPointColor() {
         return color;
+    }
+
+    @Override
+    public void setColor(PointColor byNum) {
+        color = byNum;
     }
 
     @Override
@@ -94,13 +95,4 @@ public class Point implements IPoint{
         return Objects.hash(name, pointId, x, y, color, isSelected);
     }
 
-    @Override
-    public String toString() {
-        return "Point{" +
-                "name='" + name + '\'' +
-                ", x=" + x +
-                ", y=" + y +
-                ", color=" + color +
-                '}';
-    }
 }
